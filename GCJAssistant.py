@@ -1,15 +1,17 @@
 import pyttsx3   #pip install pyttsx3
 import datetime
 import speech_recognition as sr     #pip install SpeechRecognition
+import pyaudio
 
 
 engine =pyttsx3.init()
-
+engine.setProperty("rate", 150)        #speed of voice
+voices = engine.getProperty('voices')
+engine.setProperty('voice', voices[0].id)    #different voices at index 0 1 and 2
 
 def speak(audio):
     engine.say(audio)
     engine.runAndWait()
-
 
 def time():
     Time = datetime.datetime.now().strftime("%I:%M:%S")
@@ -44,18 +46,16 @@ def greetme():
 
 def takeCommand():
     r = sr.Recognizer()
-    with sr.Microphone() as source:
+    with sr.Microphone() as source:     #input using the microphone
         print("Listening...")
         r.pause_threshold = 1
         audio = r.listen(source)
-        
     try:
-        print("Recognising...")
-        query = r.recognize_google(audio, language='en-in')
+        print("Recognizing...")
+        query = r.recognize_google(audio, language='en-uk')
         print(query)
     except Exception as e:
         print(e)
-        speak("Say that again please...")
-        
+        speak("Please Clever, i didnt get that, could you say it again please...")
         return "None"
     return query
